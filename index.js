@@ -1,3 +1,6 @@
-const bot = require('./bot');
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
-// bot();
+const Telegraf = require('telegraf');
+const bot = new Telegraf(process.env.BOT_TOKEN);

@@ -2,10 +2,10 @@
   "name": "tg-queue-bot",
   "version": "0.0.1",
   "description": "Telegram Bot for creating queues",
-  "main": "bot.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node bot.js",
-    "debug": "nodemon --inspect bot.js"
+    "start": "node index.js",
+    "debug": "nodemon --inspect index.js"
   },
   "repository": {
     "type": "git",
@@ -25,9 +25,13 @@
   "homepage": "https://github.com/CyanoFresh/tg-queue-bot#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "micro-bot": "^2.5.3"
+    "mysql2": "^1.7.0",
+    "sequelize": "^5.21.1",
+    "sequelize-cli": "^5.5.1",
+    "telegraf": "^3.33.0"
   },
   "devDependencies": {
+    "@types/sequelize": "^4.28.6",
     "eslint": "^6.5.1",
     "nodemon": "^1.19.4",
     "prettier": "^1.18.2"
