@@ -5,7 +5,8 @@ if (process.env.NODE_ENV !== 'production') {
 const Telegraf = require('telegraf');
 const session = require('telegraf/session');
 const { sequelize } = require('./models');
-const { start } = require('./commands');
+const { start, users, q, add } = require('./commands');
+const errorHandler = require('./utils/errorHandler');
 
 sequelize
   .authenticate()
@@ -14,10 +15,14 @@ sequelize
 
     const bot = new Telegraf(process.env.BOT_TOKEN);
 
+    bot.use(errorHandler);
     bot.use(session());
 
     // Register commands
     start.register(bot);
+    users.register(bot);
+    q.register(bot);
+    add.register(bot);
 
     bot.launch().then(() => console.log('Bot started'));
   })

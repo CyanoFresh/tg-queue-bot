@@ -1,6 +1,5 @@
 const Extra = require('telegraf/extra');
 const Markup = require('telegraf/markup');
-const asyncWrapper = require('../utils/asyncWrapper');
 const generateGroupHash = require('../utils/generateGroupHash');
 const { Group, User } = require('../models');
 
@@ -79,4 +78,4 @@ const start = async (ctx) => {
 
 module.exports = start;
 
-module.exports.register = bot => bot.start(asyncWrapper(start));
+module.exports.register = bot => bot.start(start);
