@@ -1,34 +1,33 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Groups', {
+    return queryInterface.createTable('Queues', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      chat_id: {
-        type: Sequelize.BIGINT,
+      GroupId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Groups',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      hash: {
-        type: Sequelize.STRING,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-    }).then(() => queryInterface.addIndex('Groups', ['chat_id'], {
-      indicesType: 'UNIQUE',
-    }));
+    });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface
-      .removeIndex('Groups', ['chat_id'])
-      .then(() => queryInterface.dropTable('Groups'));
+    return queryInterface.dropTable('Queues');
   },
 };
