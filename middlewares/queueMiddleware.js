@@ -1,7 +1,7 @@
 const { Queue } = require('../models');
 
 module.exports = async (ctx, next) => {
-  const queueId = ctx.match[1];
+  const queueId = ctx.match[2];
 
   ctx.state.queue = await Queue.findOne({
     where: {

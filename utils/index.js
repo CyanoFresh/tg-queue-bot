@@ -6,7 +6,12 @@ const generateGroupHash = () => Math.random().toString(36).substring(2, 15);
 const renderUsers = (users) => users.reduce(
   (t, user, index) => {
     let doneMark = '';
-    return t + `${index + 1}. [${user.name}](tg://user?id=${user.chat_id})${doneMark}\n`;
+
+    if (user.QueueUser && user.QueueUser.done) {
+      doneMark = config.doneUserAppend;
+    }
+
+    return t + `${index + 1}. [${user.name}${doneMark}](tg://user?id=${user.chat_id})\n`;
   },
   '',
 );
@@ -31,6 +36,7 @@ const fillQueue = async (queue, group) => {
 
   return queue;
 };
+
 const getGroupQueuesKeyboard = async (group, action) => {
   const queues = await group.getQueues();
 
