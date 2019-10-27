@@ -1,7 +1,8 @@
-const done = require('./done');
 const add = require('./add');
-const q = require('./q');
+const del = require('./del');
+const done = require('./done');
+const list = require('./list');
 const start = require('./start');
 const users = require('./users');
 
-module.exports = { done, add, q, start, users };
+module.exports = { done, add, del, list, start, users };

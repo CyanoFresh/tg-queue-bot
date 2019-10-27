@@ -5,28 +5,36 @@ if (process.env.NODE_ENV !== 'production') {
 const Telegraf = require('telegraf');
 const session = require('telegraf/session');
 const { sequelize } = require('./models');
-const { start, users, q, add } = require('./commands');
-const errorHandler = require('./utils/errorHandler');
+const errorHandler = require('./middlewares/errorHandler');
+const { start, users, list, add, del } = require('./commands');
+
+const bot = new Telegraf(process.env.BOT_TOKEN);
+
+bot.catch((err) => console.error(err));
+
+bot.use(errorHandler);
+bot.use(session());
+
+// Register commands
+start.register(bot);
+users.register(bot);
+list.register(bot);
+del.register(bot);
+add.register(bot);
 
 sequelize
   .authenticate()
   .then(() => {
     console.log('DB connected');
 
-    const bot = new Telegraf(process.env.BOT_TOKEN);
-
-    bot.use(errorHandler);
-    bot.use(session());
-
-    // Register commands
-    start.register(bot);
-    users.register(bot);
-    q.register(bot);
-    add.register(bot);
-
-    bot.launch().then(() => console.log('Bot started'));
+    bot.launch()
+      .then(() => console.log('Bot started'))
+      .catch(err => {
+        console.error('Bot launch error:', err);
+        process.exit(5);
+      });
   })
   .catch(err => {
     console.error('Unable to connect to the DB:', err);
-    process.exit();
+    process.exit(4);
   });

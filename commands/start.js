@@ -1,12 +1,8 @@
 const Extra = require('telegraf/extra');
 const Markup = require('telegraf/markup');
-const generateGroupHash = require('../utils/generateGroupHash');
+const { generateGroupHash } = require('../utils');
 const { Group, User } = require('../models');
 
-/**
- * @param {ContextMessageUpdate} ctx
- * @returns {Promise<Message|Middleware<ContextMessageUpdate>>}
- */
 const start = async (ctx) => {
   const isFromGroup = ctx.update.message.chat.id < 0;
 
@@ -18,19 +14,20 @@ const start = async (ctx) => {
     });
 
     if (!group) {
-      return ctx.reply('Добавьте бота в группу, в которой хотите создавать очереди', Extra.markup(Markup.inlineKeyboard([
-        Markup.urlButton('Добавить в группу', `https://telegram.me/${ctx.botInfo.username}?startgroup=startgroup`),
-      ])));
+      return ctx.reply(
+        'Добавьте бота в группу, в которой хотите создавать очереди',
+        Markup.inlineKeyboard([
+          Markup.urlButton('Добавить в группу', `https://telegram.me/${ctx.botInfo.username}?startgroup=startgroup`),
+        ]).extra(),
+      );
     }
 
-    let user = await User.findOne({
+    if (await User.count({
       where: {
         chat_id: ctx.update.message.from.id,
         GroupId: group.id,
       },
-    });
-
-    if (user) {
+    })) {
       return ctx.replyWithMarkdown(`Ты уже участвуешь в очередях в группе *${group.name}*`);
     }
 
@@ -42,7 +39,7 @@ const start = async (ctx) => {
       name = ctx.from.username;
     }
 
-    user = await User.create({
+    const user = await User.create({
       chat_id: ctx.update.message.from.id,
       GroupId: group.id,
       name,
@@ -71,11 +68,14 @@ const start = async (ctx) => {
     ])));
   }
 
-  return ctx.reply('Добавьте бота в группу, в которой хотите создавать очереди', Extra.markup(Markup.inlineKeyboard([
-    Markup.urlButton('Добавить в группу', `https://telegram.me/${ctx.botInfo.username}?startgroup=startgroup`),
-  ])));
+  return ctx.reply(
+    'Добавьте бота в группу, в которой хотите создавать очереди',
+    Markup.inlineKeyboard([
+      Markup.urlButton('Добавить в группу', `https://telegram.me/${ctx.botInfo.username}?startgroup=startgroup`),
+    ]).extra(),
+  );
 };
 
-module.exports = start;
+start.register = bot => bot.start(start);
 
-module.exports.register = bot => bot.start(start);
+module.exports = start;

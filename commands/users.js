@@ -1,4 +1,5 @@
-const groupMiddleware = require('../utils/groupMiddleware');
+const groupMiddleware = require('../middlewares/groupMiddleware');
+const { renderUsers } = require('../utils');
 const { Group } = require('../models');
 
 /**
@@ -25,12 +26,7 @@ const users = async (ctx) => {
       return ctx.reply('Пользователей пока нет :(\nНачните регистрацию при помощи /start');
     }
 
-    const userList = users.reduce(
-      (userList, user, index) => userList + `${index + 1}. [${user.name}](tg://user?id=${user.chat_id})\n`,
-      '',
-    );
-
-    return ctx.replyWithMarkdown(userList);
+    return ctx.replyWithMarkdown(renderUsers(users));
   } else {
     return ctx.reply('Эту команду можно использовать только в групповом чате');
   }
