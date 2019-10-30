@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const Telegraf = require('telegraf');
 const session = require('telegraf/session');
+const config = require('./config');
 const { sequelize } = require('./models');
 const errorHandler = require('./middlewares/errorHandler');
 const { start, users, list, add, del, done } = require('./commands');
@@ -28,7 +29,7 @@ sequelize
   .then(() => {
     console.log('DB connected');
 
-    bot.launch()
+    bot.launch({ webhook: config.webhook })
       .then(() => console.log('Bot started'))
       .catch(err => {
         console.error('Bot launch error:', err);

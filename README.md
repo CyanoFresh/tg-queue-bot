@@ -1,7 +1,7 @@
 Telegram Queue Bot
 ====
 
-A Telegram bot for creating queue in group chat.
+Telegram bot for creating queue in group chat.
 
 By Alex Solomaha ([@CyanoFresh](https://t.me/cyanofresh))
 
